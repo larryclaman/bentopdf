@@ -31,17 +31,6 @@ jobs:
       - name: Install Netlify CLI
         run: npm install netlify-cli -g
 
-      - name: Deploy to Netlify
-        uses: jsmrcaga/action-netlify-deploy@v2.0.0
-        with:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_TOKEN_SECRET }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_DEPLOY_TO_PROD: true
-          NETLIFY_DEPLOY_MESSAGE: "Deployed from GitHub action"
-        #  install_command: "echo Skipping installing the dependencies"
-        #  build_command: "echo Skipping building the web files"
-
-
       - name: Build distribution
         run: |
           export SIMPLE_MODE=true
@@ -52,6 +41,17 @@ jobs:
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Netlify
+        run: npx netlify deploy --dir=dist --prod --auth="$NETLIFY_AUTH_TOKEN" --site="$NETLIFY_SITE_ID"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_TOKEN_SECRET }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+
+
+
+
 
       - name: Package distribution
         run: npm run package
