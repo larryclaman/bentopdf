@@ -41,6 +41,8 @@ jobs:
         run: |
           export SIMPLE_MODE=true
           npm run build
+          ls
+
 
 
 
@@ -50,7 +52,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: build
+          path: dist
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
